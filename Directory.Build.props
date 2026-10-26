@@ -15,8 +15,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Authors>Adappt</Authors>
-    <Company>Adappt</Company>
+    <Authors>Adappt Limited</Authors>
+    <Company>Adappt Limited</Company>
+    <Copyright>Copyright (c) 2026 Adappt Limited</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Product>brotli-scan</Product>
     <RepositoryUrl>https://github.com/AdapptOnAzure/DotNetBrotliScan</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

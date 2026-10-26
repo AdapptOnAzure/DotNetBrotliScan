@@ -15,7 +15,7 @@ for rid in "${rids[@]}"; do
     echo "Building $rid"
     stage="$out/stage/$rid"
     dotnet publish "$repo/src/BrotliScan" -c Release -r "$rid" -o "$stage" --nologo -v quiet -p:Version="$version"
-    cp "$repo/README.md" "$stage/"
+    cp "$repo/README.md" "$repo/LICENCE" "$stage/"
     name="brotli-scan-$version-$rid"
     case "$rid" in
         win-*) if command -v zip >/dev/null; then (cd "$stage" && zip -q -X -r "$out/$name.zip" .)
