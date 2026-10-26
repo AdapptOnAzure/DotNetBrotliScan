@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BrotliScan/BrotliScan.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BrotliScan.Tests/BrotliScan.Tests.csproj" />
+  </Folder>
+</Solution>

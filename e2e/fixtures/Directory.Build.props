@@ -1,0 +1,3 @@
+<Project>
+  <!-- Fixtures stand alone: don't inherit the scanner's build settings. -->
+</Project>

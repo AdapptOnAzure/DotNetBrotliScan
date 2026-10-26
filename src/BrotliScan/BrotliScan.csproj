@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RollForward>LatestMajor</RollForward>
+    <AssemblyName>brotli-scan</AssemblyName>
+    <RootNamespace>BrotliScan</RootNamespace>
+    <Version>1.0.0</Version>
+    <!-- For the Windows console check in Program.cs (source-generated P/Invoke). -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>brotli-scan</ToolCommandName>
+    <PackageId>BrotliScan</PackageId>
+    <Description>Flags .NET projects, apps, runtimes and Azure-hosted apps affected by CVE-2026-111497 (brotli decoder).</Description>
+  </PropertyGroup>
+
+  <!-- Standalone downloads: one self-contained file per platform, nothing to install. -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="BrotliScan.Tests" />
+  </ItemGroup>
+
+</Project>

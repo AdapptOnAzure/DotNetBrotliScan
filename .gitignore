@@ -1,0 +1,20 @@
+# Build output
+bin/
+obj/
+dist/
+nupkg/
+artifacts/
+TestResults/
+*.binlog
+
+# Scan reports written with --output
+*-report.json
+
+# Editors and OS
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db

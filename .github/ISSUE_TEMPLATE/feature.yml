@@ -1,0 +1,15 @@
+name: Feature request
+description: A pattern, platform or hosting model the scanner should cover.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What should it do
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: The situation this would help with.

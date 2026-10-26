@@ -1,0 +1,10 @@
+# Normalise line endings in the repo; check out shell scripts with LF everywhere (including
+# Windows) so Git Bash can run them.
+* text=auto eol=lf
+*.sh text eol=lf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.png binary
+*.zip binary
+*.gz binary

@@ -1,0 +1,25 @@
+name: Bug
+description: The scanner crashed, hung, or didn't do what its documentation says.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Command and output
+      description: The command you ran and its output. Redact paths, app names and subscription IDs if needed.
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: brotli-scan version and platform
+      placeholder: 1.0.0, osx-arm64
+    validations:
+      required: true
