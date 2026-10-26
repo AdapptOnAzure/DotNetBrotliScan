@@ -32,6 +32,6 @@ body:
     id: version
     attributes:
       label: brotli-scan version and platform
-      placeholder: 1.0.0, win-x64
+      placeholder: 1.1.0, win-x64
     validations:
       required: true

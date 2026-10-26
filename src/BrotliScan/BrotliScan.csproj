@@ -6,7 +6,7 @@
     <RollForward>LatestMajor</RollForward>
     <AssemblyName>brotli-scan</AssemblyName>
     <RootNamespace>BrotliScan</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <!-- For the Windows console check in Program.cs (source-generated P/Invoke). -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackAsTool>true</PackAsTool>

@@ -111,7 +111,7 @@ brotli-scan --json ~/src | jq '.targets[] | select(any(.findings[]; .kind == "in
 
 ```text
 $ brotli-scan ~/src
-brotli-scan 1.0.0: CVE-2026-111497 (brotli decoder out-of-bounds write; fixed in brotli 1.0.10, 1.1.1, 1.2.1)
+brotli-scan 1.1.0: CVE-2026-111497 (brotli decoder out-of-bounds write; fixed in brotli 1.0.10, 1.1.1, 1.2.1)
 
 BROTLI DECODERS
   VULNERABLE      .NET runtime 10.0.13
@@ -189,7 +189,7 @@ steps:
       tenant-id: ${{ vars.AZURE_TENANT_ID }}
       subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
   - run: |
-      gh release download v1.0.0 --repo AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan --pattern 'brotli-scan-*-linux-x64.tar.gz' --output brotli-scan.tar.gz
+      gh release download v1.1.0 --repo AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan --pattern 'brotli-scan-*-linux-x64.tar.gz' --output brotli-scan.tar.gz
       gh attestation verify brotli-scan.tar.gz --repo AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan
       tar -xzf brotli-scan.tar.gz && ./brotli-scan --azure --output brotli-report.json
     env:
