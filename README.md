@@ -215,7 +215,7 @@ See [SECURITY.md](SECURITY.md) to report a vulnerability in the scanner itself.
 - Code under `#if` symbols that aren't commonly defined isn't parsed.
 - Some builds strip the strings the fingerprint relies on (for example the .NET 8 single-file host). Those decoders are reported as *unconfirmed* rather than guessed at.
 - A framework-dependent app is judged against the runtimes on the machine doing the scan, matched by major version. Production may run a different patch level, so scan production hosts too, or the Azure apps directly.
-- The Azure integration is tested against simulated ARM, Kudu and Blob endpoints. Only the public Azure cloud is supported.
+- Sign-in, app discovery and permission errors have been run against a live subscription; the Kudu and Blob downloads themselves are tested against simulated endpoints. Only the public Azure cloud is supported.
 - The Windows binaries are unsigned and the macOS binaries only ad-hoc signed, so SmartScreen and Gatekeeper will ask before running them.
 
 # How it works

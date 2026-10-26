@@ -108,7 +108,7 @@ internal sealed class Reporter(TextWriter output, IReadOnlyList<string> roots, b
         foreach (var target in report.Targets)
         {
             Verdict(target.Verdict);
-            Write($"{target.Kind,-16}", ConsoleColor.DarkGray);
+            Write(target.Kind.PadRight(15) + " ", ConsoleColor.DarkGray);
             Write(Display(target.Path), ConsoleColor.White);
             Line(string.IsNullOrEmpty(target.Description) ? "" : $"  [{target.Description}]", ConsoleColor.DarkGray);
             Line($"{Indent}{target.Reason}");
