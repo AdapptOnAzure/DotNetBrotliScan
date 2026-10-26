@@ -3,7 +3,7 @@
 ## Reporting a vulnerability in brotli-scan
 
 Please don't open a public issue. Report it privately through
-[GitHub Security Advisories](https://github.com/AdapptOnAzure/DotNetBrotliScan/security/advisories/new)
+[GitHub Security Advisories](https://github.com/AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan/security/advisories/new)
 with what you found, how to reproduce it, and the version and platform you used.
 
 We aim to acknowledge reports within two working days and to agree a fix and disclosure date with you.

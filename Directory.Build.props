@@ -20,9 +20,9 @@
     <Copyright>Copyright (c) 2026 Adappt Limited</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Product>brotli-scan</Product>
-    <RepositoryUrl>https://github.com/AdapptOnAzure/DotNetBrotliScan</RepositoryUrl>
+    <RepositoryUrl>https://github.com/AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>https://github.com/AdapptOnAzure/DotNetBrotliScan</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan</PackageProjectUrl>
   </PropertyGroup>
 
   <!-- Reproducible paths and embedded commit info for builds on GitHub Actions. -->

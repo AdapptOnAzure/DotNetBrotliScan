@@ -52,7 +52,7 @@ Exit codes: `0` nothing affected or to review, `1` affected or likely affected, 
 
 # Download
 
-Grab the file for your platform from the [Releases page](https://github.com/AdapptOnAzure/DotNetBrotliScan/releases).
+Grab the file for your platform from the [Releases page](https://github.com/AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan/releases).
 
 - Windows: `brotli-scan-<version>-win-x64.zip`, `brotli-scan-<version>-win-arm64.zip`
 - macOS: `brotli-scan-<version>-osx-arm64.tar.gz` (Apple silicon), `brotli-scan-<version>-osx-x64.tar.gz` (Intel)
@@ -61,7 +61,7 @@ Grab the file for your platform from the [Releases page](https://github.com/Adap
 Check the download against `SHA256SUMS`, and verify it was built by this repo's release workflow:
 
 ```sh
-gh attestation verify brotli-scan-<version>-linux-x64.tar.gz --repo AdapptOnAzure/DotNetBrotliScan
+gh attestation verify brotli-scan-<version>-linux-x64.tar.gz --repo AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan
 ```
 
 # Usage
@@ -189,8 +189,8 @@ steps:
       tenant-id: ${{ vars.AZURE_TENANT_ID }}
       subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
   - run: |
-      gh release download v1.0.0 --repo AdapptOnAzure/DotNetBrotliScan --pattern 'brotli-scan-*-linux-x64.tar.gz' --output brotli-scan.tar.gz
-      gh attestation verify brotli-scan.tar.gz --repo AdapptOnAzure/DotNetBrotliScan
+      gh release download v1.0.0 --repo AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan --pattern 'brotli-scan-*-linux-x64.tar.gz' --output brotli-scan.tar.gz
+      gh attestation verify brotli-scan.tar.gz --repo AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan
       tar -xzf brotli-scan.tar.gz && ./brotli-scan --azure --output brotli-report.json
     env:
       GH_TOKEN: ${{ github.token }}

@@ -7,6 +7,7 @@ set -euo pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 out="${1:-$repo/dist}"
+mkdir -p "$out" && out="$(cd "$out" && pwd)"   # absolute: the archive steps run from inside the stage folder
 tar_opts=()
 if command -v cygpath >/dev/null; then   # Git Bash: use Windows paths and stop it rewriting arguments
     repo="$(cygpath -m "$repo")"; out="$(cygpath -m "$out")"

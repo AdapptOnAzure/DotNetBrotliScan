@@ -26,5 +26,5 @@ First release.
 - Standalone downloads for Windows, macOS and Linux on x64 and Arm64, with SHA-256 checksums and build
   provenance attestations. Each embeds the fixed .NET 10 runtime; the release fails if it doesn't.
 
-[Unreleased]: https://github.com/AdapptOnAzure/DotNetBrotliScan/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/AdapptOnAzure/DotNetBrotliScan/releases/tag/v1.0.0
+[Unreleased]: https://github.com/AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/AdapptOnAzure/CVE-2026-111497-DotNetBrotliScan/releases/tag/v1.0.0
