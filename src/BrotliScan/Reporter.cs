@@ -152,32 +152,35 @@ internal sealed class Reporter(TextWriter output, IReadOnlyList<string> roots, b
         }
 
         Line();
-        Heading("WHAT TO DO UNTIL .NET SHIPS THE FIX");
+        Heading("WHAT TO DO");
+        Line("  Install the fixed .NET runtime (released 2026-10-25) on every machine and image that runs");
+        Line("  these apps, then republish self-contained, single-file and Native AOT apps and rescan:");
+        Line("    .NET 10.0.14 (SDK 10.0.403 or 10.0.114), .NET 9.0.22 (SDK 9.0.320 or 9.0.123),", ConsoleColor.Cyan);
+        Line("    .NET 8.0.33 (SDK 8.0.427 or 8.0.133)", ConsoleColor.Cyan);
+        Line("  Older .NET versions are out of support and won't be fixed: move them to .NET 8 or later.");
+        Line("  Until then, or for apps you can't update yet:");
         if (exposed.Any(f => f.Kind == FindingKind.InboundRequest))
         {
-            Line("  Stop accepting brotli from clients: remove 'br' from request decompression, and don't wrap");
-            Line("  request bodies in BrotliStream or register brotli decompression providers:");
-            Line("    builder.Services.AddRequestDecompression(o => o.DecompressionProviders.Remove(\"br\"));", ConsoleColor.Cyan);
+            Line("    Stop accepting brotli from clients: remove 'br' from request decompression, and don't wrap");
+            Line("    request bodies in BrotliStream or register brotli decompression providers:");
+            Line("      builder.Services.AddRequestDecompression(o => o.DecompressionProviders.Remove(\"br\"));", ConsoleColor.Cyan);
         }
 
         if (exposed.Any(f => f.Kind == FindingKind.OutboundResponse))
         {
-            Line("  Drop Brotli from AutomaticDecompression:");
-            Line("    handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;", ConsoleColor.Cyan);
+            Line("    Drop Brotli from AutomaticDecompression:");
+            Line("      handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;", ConsoleColor.Cyan);
         }
 
         if (exposed.Any(f => f.Kind == FindingKind.DirectDecode))
         {
-            Line("  Don't pass brotli data you don't control to BrotliStream or BrotliDecoder.");
+            Line("    Don't pass brotli data you don't control to BrotliStream or BrotliDecoder.");
         }
 
         if (exposed.Any(f => f.Kind is FindingKind.Ambiguous or FindingKind.ThirdPartyBrotli))
         {
-            Line("  Check each 'review' finding by hand: the scanner couldn't tell whether it decodes untrusted brotli.");
+            Line("    Check each 'review' finding by hand: the scanner couldn't tell whether it decodes untrusted brotli.");
         }
-
-        Line("  Then install the patched .NET runtime when Microsoft releases it, republish self-contained and");
-        Line("  single-file apps, and rescan. The scanner recognises the fixed decoder without an update.");
     }
 
     private const string Indent = "                  ";

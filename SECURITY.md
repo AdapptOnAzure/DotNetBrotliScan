@@ -10,8 +10,9 @@ We aim to acknowledge reports within two working days and to agree a fix and dis
 
 ## Supported versions
 
-Only the latest release gets fixes. The downloads embed the .NET runtime, so each release is rebuilt
-when .NET ships a security update.
+Only the latest release gets fixes. The downloads embed the .NET runtime, so a new release is built
+when .NET ships a security update, and the release workflow refuses to publish a build whose embedded
+brotli decoder lacks the CVE-2026-111497 fix.
 
 ## What the scanner does with your data
 
@@ -25,6 +26,6 @@ when .NET ships a security update.
 
 ## About CVE-2026-111497 itself
 
-The flaw is in brotli's decoder, not in this tool. For .NET, watch the
-[.NET release notes](https://github.com/dotnet/core/tree/main/release-notes) for the patched runtime,
-and see the README for interim mitigations.
+The flaw is in brotli's decoder, not in this tool. Microsoft fixed it in .NET 10.0.14, 9.0.22 and 8.0.33
+(2026-10-25); see the [.NET release notes](https://github.com/dotnet/core/tree/main/release-notes).
+The README covers interim mitigations for apps you can't update yet.

@@ -21,9 +21,10 @@ First release.
 - Inspects this machine's .NET runtimes, packs and NuGet cache on Windows, macOS and Linux.
 - Scans Azure App Service and Azure Functions apps (Windows, Linux, Flex Consumption) using the Azure CLI
   login, with no keys or secrets.
-- Text and JSON reports, and exit codes for CI.
+- Text and JSON reports, and exit codes for CI. Remediation names the fixed .NET releases (10.0.14,
+  9.0.22, 8.0.33) and the interim mitigations.
 - Standalone downloads for Windows, macOS and Linux on x64 and Arm64, with SHA-256 checksums and build
-  provenance attestations.
+  provenance attestations. Each embeds the fixed .NET 10 runtime; the release fails if it doesn't.
 
 [Unreleased]: https://github.com/AdapptOnAzure/DotNetBrotliScan/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/AdapptOnAzure/DotNetBrotliScan/releases/tag/v1.0.0
