@@ -7,6 +7,12 @@ set -euo pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 work="$(mktemp -d)"
+# Git Bash on Windows rewrites anything that looks like a POSIX path (including jq patterns) before
+# a native program sees it. Use Windows paths throughout and turn that rewriting off.
+if command -v cygpath >/dev/null; then
+    repo="$(cygpath -m "$repo")"; work="$(cygpath -m "$work")"
+    export MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL='*'
+fi
 cleanup() { rm -rf "$work"; find "$repo/e2e/fixtures" -type d \( -name bin -o -name obj \) -prune -exec rm -rf {} +; }
 trap cleanup EXIT
 
@@ -23,8 +29,7 @@ scanner=(dotnet "$repo/src/BrotliScan/bin/Release/net10.0/brotli-scan.dll")
 scan() { "${scanner[@]}" --no-host --json "$@" || [ $? -le 2 ]; }
 
 # Exposed covers affected, likely affected and patched: which one depends on the decoder, not the code.
-# Paths are normalised to forward slashes so the same filters work on Windows. Patterns never start
-# with '/': Git Bash would rewrite them as Windows paths before jq sees them.
+# Paths are normalised to forward slashes so the same filters work on Windows.
 bucket='if . == "notExposed" or . == "review" then . else "exposed" end'
 failures=0
 pass() { printf '  ok    %-44s %s\n' "$1" "$2"; }
@@ -81,7 +86,7 @@ echo "Standalone binary ($rid):"
 RIDS="$rid" "$repo/build/package.sh" "$work/dist" >/dev/null
 mkdir -p "$work/standalone"
 case "$rid" in
-    win-*) unzip -q "$work"/dist/*.zip -d "$work/standalone" 2>/dev/null || powershell -NoProfile -Command "Expand-Archive '$(cygpath -w "$work"/dist/*.zip)' '$(cygpath -w "$work/standalone")'"; exe="$work/standalone/brotli-scan.exe" ;;
+    win-*) unzip -q "$work"/dist/*.zip -d "$work/standalone" 2>/dev/null || powershell -NoProfile -Command "Expand-Archive '$(ls "$work"/dist/*.zip)' '$work/standalone'"; exe="$work/standalone/brotli-scan.exe" ;;
     *) tar -xzf "$work"/dist/*.tar.gz -C "$work/standalone"; exe="$work/standalone/brotli-scan" ;;
 esac
 if "$exe" --help | grep -q "Usage: brotli-scan"; then pass "runs" "--help"; else fail "runs" "--help failed"; fi

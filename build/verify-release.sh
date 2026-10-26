@@ -7,6 +7,12 @@ set -euo pipefail
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 dist="${1:?usage: build/verify-release.sh <dist>}"
 work="$(mktemp -d)"
+tar_opts=()
+if command -v cygpath >/dev/null; then   # Git Bash: use Windows paths and stop it rewriting arguments
+    repo="$(cygpath -m "$repo")"; work="$(cygpath -m "$work")"
+    export MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL='*'
+    tar_opts=(--force-local)   # GNU tar would read C:/... as host:path
+fi
 trap 'rm -rf "$work"' EXIT
 
 dotnet build "$repo/src/BrotliScan" -c Release --nologo -v quiet >/dev/null
@@ -16,7 +22,7 @@ for archive in "$dist"/brotli-scan-*; do
     mkdir -p "$work/$name"
     case "$archive" in
         *.zip) unzip -q "$archive" -d "$work/$name" ;;
-        *.tar.gz) tar -xzf "$archive" -C "$work/$name" ;;
+        *.tar.gz) tar ${tar_opts[@]+"${tar_opts[@]}"} -xzf "$archive" -C "$work/$name" ;;
     esac
     count=$((count + 1))
 done
