@@ -23,7 +23,8 @@ scanner=(dotnet "$repo/src/BrotliScan/bin/Release/net10.0/brotli-scan.dll")
 scan() { "${scanner[@]}" --no-host --json "$@" || [ $? -le 2 ]; }
 
 # Exposed covers affected, likely affected and patched: which one depends on the decoder, not the code.
-# Paths are normalised to forward slashes so the same filters work on Windows.
+# Paths are normalised to forward slashes so the same filters work on Windows. Patterns never start
+# with '/': Git Bash would rewrite them as Windows paths before jq sees them.
 bucket='if . == "notExposed" or . == "review" then . else "exposed" end'
 failures=0
 pass() { printf '  ok    %-44s %s\n' "$1" "$2"; }
@@ -31,7 +32,10 @@ fail() { printf '  FAIL  %-44s %s\n' "$1" "$2"; failures=$((failures + 1)); }
 check() { # label, report, path regex, expected bucket
     local actual
     actual="$(jq -r --arg re "$3" "[.targets[] | select(.path | gsub(\"\\\\\\\\\"; \"/\") | test(\$re)) | .verdict | $bucket] | unique | join(\",\")" <<<"$2")"
-    if [ "$actual" = "$4" ]; then pass "$1" "$4"; else fail "$1" "expected $4, got ${actual:-nothing}"; fi
+    if [ "$actual" = "$4" ]; then pass "$1" "$4"; else
+        fail "$1" "expected $4, got ${actual:-nothing}"
+        jq -r '.targets[] | "        target: \(.path) = \(.verdict)"' <<<"$2" | head -5
+    fi
 }
 
 expected="CompressOnly=notExposed ConfigDriven=review DirectDecode=exposed HelloApi=notExposed InboundApi=exposed
@@ -39,7 +43,7 @@ expected="CompressOnly=notExposed ConfigDriven=review DirectDecode=exposed Hello
 
 echo "Source:"
 report="$(scan "$repo/e2e/fixtures")"
-for pair in $expected; do check "${pair%%=*}" "$report" "/${pair%%=*}/[^/]*proj$" "${pair##*=}"; done
+for pair in $expected; do check "${pair%%=*}" "$report" "(^|/)${pair%%=*}/[^/]*proj$" "${pair##*=}"; done
 
 echo "Build output (IL):"
 for pair in $expected; do
@@ -47,9 +51,9 @@ for pair in $expected; do
     dotnet build "$(ls "$repo/e2e/fixtures/$name/"*.*proj)" -c Release --nologo -v quiet -o "$work/bin/$name" >/dev/null
 done
 report="$(scan "$work/bin")"
-for pair in $expected; do check "${pair%%=*}" "$report" "/bin/${pair%%=*}$" "${pair##*=}"; done
+for pair in $expected; do check "${pair%%=*}" "$report" "(^|/)bin/${pair%%=*}$" "${pair##*=}"; done
 for name in InboundApi ManualBodyApi CustomProviderApi; do
-    inbound="$(jq -r --arg re "/bin/$name$" '[.targets[] | select(.path | gsub("\\\\"; "/") | test($re)) | .findings[] | select(.kind == "inboundRequest")] | length' <<<"$report")"
+    inbound="$(jq -r --arg re "(^|/)bin/$name$" '[.targets[] | select(.path | gsub("\\\\"; "/") | test($re)) | .findings[] | select(.kind == "inboundRequest")] | length' <<<"$report")"
     if [ "$inbound" -gt 0 ]; then pass "$name accepts brotli from clients" inbound; else fail "$name" "no inbound finding"; fi
 done
 
@@ -82,9 +86,9 @@ case "$rid" in
 esac
 if "$exe" --help | grep -q "Usage: brotli-scan"; then pass "runs" "--help"; else fail "runs" "--help failed"; fi
 report="$("$exe" --no-host --json "$repo/e2e/fixtures" || [ $? -le 2 ])"
-check "scans InboundApi from the standalone binary" "$report" "/InboundApi/[^/]*proj$" exposed
+check "scans InboundApi from the standalone binary" "$report" "(^|/)InboundApi/[^/]*proj$" exposed
 report="$("$exe" --no-host --json "$work/standalone" || [ $? -le 2 ])"
-check "the scanner itself" "$report" "/standalone/brotli-scan(\\.exe)?$" notExposed
+check "the scanner itself" "$report" "(^|/)standalone/brotli-scan(\\.exe)?$" notExposed
 if "$exe" --host-only --json >/dev/null || [ $? -le 2 ]; then pass "inspects this machine" "--host-only"; else fail "inspects this machine" "--host-only failed"; fi
 
 if command -v cmake >/dev/null && command -v git >/dev/null; then
@@ -99,7 +103,7 @@ if command -v cmake >/dev/null && command -v git >/dev/null; then
     done
     report="$(scan "$work/libs")"
     for pair in v1.1.0=vulnerable v1.1.1=patched; do
-        actual="$(jq -r --arg v "/${pair%%=*}/" '.components[] | select(.path | gsub("\\\\"; "/") | contains($v)) | .status' <<<"$report")"
+        actual="$(jq -r --arg v "${pair%%=*}" '.components[] | select(.path | gsub("\\\\"; "/") | contains("/" + $v + "/")) | .status' <<<"$report")"
         if [ "$actual" = "${pair##*=}" ]; then pass "brotli ${pair%%=*}" "$actual"; else fail "brotli ${pair%%=*}" "expected ${pair##*=}, got ${actual:-nothing}"; fi
     done
 fi
